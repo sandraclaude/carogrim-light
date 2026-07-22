@@ -129,12 +129,19 @@ a {
 .btn:active { transform: translateY(1px) scale(0.98); }
 
 .btn-primary {
-  background: var(--text);
-  color: var(--bg);
+  background: linear-gradient(90deg, #ff2e93, #ff8a3d, #b9f22c, #2fd8f5, #9a6bff, #ff2e93);
+  background-size: 220% 100%;
+  background-position: 0% 0%;
+  color: #1c1420;
+  transition: transform 0.15s ease, box-shadow 0.2s ease, background-position 0.5s ease;
 }
 .btn-primary:hover {
   box-shadow: 0 8px 20px rgb(var(--shadow-color) / 0.22);
   transform: translateY(-2px);
+  background-position: 100% 0%;
+}
+@media (prefers-reduced-motion: reduce) {
+  .btn-primary { transition: box-shadow 0.2s ease; }
 }
 
 .btn-ghost {
@@ -173,16 +180,10 @@ a {
   font-size: 1.15rem;
   margin-right: auto;
 }
-.nav-brand-mark {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 34px;
-  height: 34px;
-  border-radius: 999px;
-  background: var(--pink);
-  color: var(--text);
-  font-weight: 800;
+.nav-logo {
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
 }
 .nav-links {
   display: flex;
