@@ -361,9 +361,16 @@ a {
 }
 .gallery-tile {
   position: relative;
+  display: block;
+  width: 100%;
+  border: none;
+  padding: 0;
+  margin: 0;
   border-radius: var(--radius-soft);
   overflow: hidden;
   background: var(--surface);
+  cursor: pointer;
+  font: inherit;
 }
 .gallery-tile img {
   position: absolute;
@@ -373,7 +380,46 @@ a {
   object-fit: cover;
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
+.gallery-tile::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgb(var(--shadow-color) / 0);
+  transition: background 0.2s ease;
+}
+.gallery-tile::before {
+  content: "";
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  background-color: var(--surface);
+  box-shadow: 0 4px 14px rgb(var(--shadow-color) / 0.25);
+  -webkit-mask-image: url('assets/icons/magnifying-glass-plus.svg');
+  mask-image: url('assets/icons/magnifying-glass-plus.svg');
+  -webkit-mask-size: 18px;
+  mask-size: 18px;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
 .gallery-tile:hover img { transform: scale(1.05); }
+.gallery-tile:hover::after { background: rgb(var(--shadow-color) / 0.12); }
+.gallery-tile:hover::before,
+.gallery-tile:focus-visible::before {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.gallery-cta {
+  margin-top: 2rem;
+}
 
 .gallery-tile-a { grid-column: span 3; grid-row: span 2; }
 .gallery-tile-b { grid-column: span 3; grid-row: span 1; }
@@ -580,3 +626,172 @@ a {
 @media (prefers-reduced-motion: reduce) {
   .reveal { opacity: 1; transform: none; transition: none; }
 }
+
+/* ---------- Gallery page ---------- */
+.gallery-page-header {
+  padding: clamp(2.5rem, 6vw, 4.5rem) 0 clamp(1.5rem, 3vw, 2.5rem);
+}
+.gallery-page-header h1 {
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  margin-bottom: 0.75rem;
+}
+.gallery-page-header p {
+  color: var(--text-soft);
+  font-size: 1.1rem;
+  max-width: 60ch;
+}
+
+.gallery-full {
+  padding: 0 0 clamp(3rem, 6vw, 5rem);
+}
+.gallery-full-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1rem;
+}
+.gallery-full-tile {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  border: none;
+  padding: 0;
+  margin: 0;
+  border-radius: var(--radius-soft);
+  overflow: hidden;
+  background: var(--surface);
+  cursor: pointer;
+  font: inherit;
+}
+.gallery-full-tile img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.gallery-full-tile::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgb(var(--shadow-color) / 0);
+  transition: background 0.2s ease;
+}
+.gallery-full-tile::before {
+  content: "";
+  position: absolute;
+  top: 0.85rem;
+  right: 0.85rem;
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  background-color: var(--surface);
+  box-shadow: 0 4px 14px rgb(var(--shadow-color) / 0.25);
+  -webkit-mask-image: url('assets/icons/magnifying-glass-plus.svg');
+  mask-image: url('assets/icons/magnifying-glass-plus.svg');
+  -webkit-mask-size: 17px;
+  mask-size: 17px;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  opacity: 0;
+  transform: translateY(-6px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.gallery-full-tile:hover img { transform: scale(1.05); }
+.gallery-full-tile:hover::after { background: rgb(var(--shadow-color) / 0.12); }
+.gallery-full-tile:hover::before,
+.gallery-full-tile:focus-visible::before {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ---------- Lightbox ---------- */
+.lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(1rem, 5vw, 4rem);
+  background: rgb(var(--shadow-color) / 0.92);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+.lightbox-overlay.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+.lightbox-figure {
+  position: relative;
+  max-width: min(1100px, 92vw);
+  max-height: 88vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+.lightbox-img {
+  max-width: 100%;
+  max-height: 78vh;
+  border-radius: var(--radius-soft);
+  box-shadow: 0 24px 60px rgb(0 0 0 / 0.45);
+  background: var(--surface);
+  opacity: 0;
+  transform: scale(0.97);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+.lightbox-overlay.is-open .lightbox-img {
+  opacity: 1;
+  transform: scale(1);
+}
+.lightbox-caption {
+  color: #f8f1f6;
+  font-size: 0.95rem;
+  text-align: center;
+  max-width: 60ch;
+}
+.lightbox-close,
+.lightbox-nav {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  border: none;
+  background: var(--surface);
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+.lightbox-close:hover,
+.lightbox-nav:hover { transform: scale(1.06); }
+.lightbox-close {
+  top: -14px;
+  right: -14px;
+}
+@media (max-width: 640px) {
+  .lightbox-close { top: -46px; right: 0; }
+}
+.lightbox-nav.prev { left: clamp(0.5rem, 3vw, 2rem); }
+.lightbox-nav.next { right: clamp(0.5rem, 3vw, 2rem); }
+.lightbox-close .icon-x,
+.lightbox-nav .icon-caret {
+  width: 18px;
+  height: 18px;
+  background-color: var(--text);
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+}
+.lightbox-close .icon-x { -webkit-mask-image: url('assets/icons/x.svg'); mask-image: url('assets/icons/x.svg'); }
+.lightbox-nav.prev .icon-caret { -webkit-mask-image: url('assets/icons/caret-left.svg'); mask-image: url('assets/icons/caret-left.svg'); }
+.lightbox-nav.next .icon-caret { -webkit-mask-image: url('assets/icons/caret-right.svg'); mask-image: url('assets/icons/caret-right.svg'); }
